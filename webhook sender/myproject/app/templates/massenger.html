@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Messager Box</title>
+    <style>
+      body {
+        background-color: cadetblue;
+      }
+      
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      
+      .form-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #000;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+      }
+      
+      h1 {
+        font-size: 45px;
+        color: #fff;
+        text-align: center;
+        font-family: 'Pacifico', cursive;
+        font-weight: 600;
+        margin-bottom: 30px;
+      }
+      
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+      
+      label {
+        font-size: 30px;
+        color: #fff;
+        margin-bottom: 10px;
+      }
+      
+      input[type="text"] {
+        height: 30px;
+        width: 300px;
+        margin-bottom: 20px;
+        padding: 5px;
+        font-size: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      
+      button[type="submit"] {
+        height: 30px;
+        width: 100px;
+        color: #fff;
+        font-size: 15px;
+        background-color: #333;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-container">
+        <h1>Send Message</h1>
+        <form id="send-message-form" method="POST" action="{% url 'webhook_sender' %}">
+          {% csrf_token %}
+          <label for="message">Message:</label>
+          <input type="text" id="message" name="message" required>
+          <button type="submit" id="send-button">Send</button>
+        </form>
+      </div>
+    </div>
+    <script>
+      document.getElementById('send-message-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var message = document.getElementById('message').value;
+        var data = { 'message': message };
+        fetch('{% url "webhook_sender" %}', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+        .then(response => {
+          if (response.ok) {
+            var notification = document.createElement('div');
+            notification.innerHTML = 'Message sent successfully';
+            notification.style.backgroundColor = '#28a745';
+            notification.style.color = '#fff';
+            notification.style.padding = '10px';
+            notification.style.borderRadius = '5px';
+            notification.style.marginTop = '10px';
+            document.getElementById('send-message-form').appendChild(notification);
+          } else {                                                                                                                                            
+            console.log('Failed to send data. Response status code:', response.status);
+          }
+        })
+        .catch(error => {
+          console.log('Error sending data:', error);
+        });
+      });
+    </script>
+  </body>
+</html>

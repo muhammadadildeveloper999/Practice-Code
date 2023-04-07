@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Message Receiver</title>
+  
+</head>
+
+<body>
+    <style>
+        #adil li {
+          font-size: 16px;
+          color: #333;
+          margin-bottom: 10px;
+          list-style: none;
+          min-height: 80px auto;
+         font-size: 17px;
+         background-color: lightgrey;
+         border: 1px solid #ccc;
+         padding: 0.5em;
+         width: fit-content;
+             border-radius: 10px;
+             margin-left: 140px;
+             align-items: center;
+        }
+      </style>
+      
+    <div id="message-box" class="message-box">
+        <div class="message">
+            <p>This is a message box.</p>
+        </div>
+        <div id="adil"></div>
+    </div>
+    <script>
+
+        var apiUrl = 'http://127.0.0.1:8005/receive_notificationother/';
+
+        fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+        console.log(data.messages);
+        var newdata = data.messages;
+        console.log(newdata, "newdata")
+        var adil="adil"
+        // for(i=0;i<newdata.length; i++) {
+        //     document.getElementById("adil").innerText=i
+        // }
+        const datas =newdata.map((e)=>{
+            const b = document.getElementById("adil")
+            let li = document.createElement('li');
+
+                    li.textContent = e.text
+                    b.append(li);
+                    return li;
+            // b.append(e.text )
+            return e
+        })
+        console.log("dataa",datas)
+        // newdata.map((value, id)=>{            // b.append(e.text )
+        // is li ko per styling kerni hai mujhe so how
+        //   // console.log(value.text)  
+        //     document.write(`<h2 style="color: #000; 
+        //     min-height: 80px auto;
+        //     font-size: 17px;
+        //     background-color: lightgrey;
+        //     border: 1px solid #ccc;
+        //     padding: 0.5em;
+        //     width: fit-content;
+        //     border-radius: 10px;
+        //     margin-left: 140px;
+        //     align-items: center;">${"id",value.id, value.text}<h2/>`)
+        // })
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+        
+        
+    </script>
+  
+</body>
+</html>

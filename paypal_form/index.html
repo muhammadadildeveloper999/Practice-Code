@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    </head>
+    
+    <body>
+        <style>
+            .w3-container {
+                font-size: 14px;
+            }
+    
+            .center {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }
+        </style>
+    
+        <div class="center">
+            <h3 class="donate">
+                <div class="w3-card-4">
+    
+                    <header class="w3-container w3-blue">
+                        <h1>DONATE</h1>
+                    </header>
+    
+                    <div class="w3-container">
+                        <p>Donate for a great cause. Be a hero.</p>
+    
+                        <!-- PAYPAL BUTTONS HERE  -->   
+                        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    
+                        <div id="paypal-button-container"></div>
+                        
+                        <script>
+                        
+                            // Render the PayPal button
+                        
+                            paypal.Button.render({
+                        
+                                // Set your environment
+                        
+                                env: 'sandbox', // sandbox | production
+                        
+                                // Specify the style of the button
+                        
+                                style: {
+                                    layout: 'vertical',  // horizontal | vertical
+                                    size:   'medium',    // medium | large | responsive
+                                    shape:  'rect',      // pill | rect
+                                    color:  'gold'       // gold | blue | silver | black
+                                },
+                        
+                                // Specify allowed and disallowed funding sources
+                                //
+                                // Options:
+                                // - paypal.FUNDING.CARD
+                                // - paypal.FUNDING.CREDIT
+                                // - paypal.FUNDING.ELV
+                        
+                                funding: {
+                                    allowed: [ paypal.FUNDING.CARD, paypal.FUNDING.CREDIT ],
+                                    disallowed: [ ]
+                                },
+                        
+                                // PayPal Client IDs - replace with your own
+                                // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+                        
+                                client: {
+                                    sandbox:    'AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R',
+                                    production: '<insert production client id>'
+                                },
+                        
+                                payment: function(data, actions) {
+                                    return actions.payment.create({
+                                        payment: {
+                                            transactions: [
+                                                {
+                                                    amount: { total: '50', currency: 'USD' }
+                                                }
+                                            ]
+                                        }
+                                    });
+                                },
+                        
+                                onAuthorize: function(data, actions) {
+                                    return actions.payment.execute().then(function() {
+                                        window.alert('Payment Complete!');
+                                    });
+                                }
+                        
+                            }, '#paypal-button-container');
+                        
+                        </script>
+                        
+                    </div>
+    
+                    <footer class="w3-container w3-blue">
+                        <h5>&copy Professional Cipher</h5>
+                    </footer>
+    
+                </div>
+            </h3>
+    
+        </div>
+    
+</body>
+</html>
