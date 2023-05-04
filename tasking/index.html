@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>DICOM Image Viewer</title>
+  <!-- Include the Cornerstone library -->
+  <script src="https://unpkg.com/cornerstone-core/dist/cornerstone.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/cornerstone-wado-image-loader@3.0.6/dist/cornerstoneWADOImageLoader.min.js"></script>
+  <script src="https://unpkg.com/dicom-parser/dist/dicomParser.js"></script>
+
+  <!-- CSS styles for the image rendering -->
+  <link rel="stylesheet" href="https://unpkg.com/cornerstone-core/dist/cornerstone.css" />
+
+  
+</head>
+<body>
+  <!-- A button for choosing files -->
+  <input type="file" id="fileInput" multiple>
+
+  <!-- Div elements for displaying the images -->
+  <div id="dicomImages" style="  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+  border-radius: 30px;
+  padding: 10px;
+";
+    
+      margin-top: 20px; border-radius: 30px;"></div>
+
+  <!-- JavaScript to load and display the images -->
+  <script>
+    // Register the WADOImageLoader with Cornerstone
+    cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
+    cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
+    cornerstoneWADOImageLoader.webWorkerManager.initialize();
+
+    // Add an event listener to the file input button
+    const fileInput = document.getElementById('fileInput');
+    fileInput.addEventListener('change', function() {
+      // Clear any previously displayed images
+      const dicomImages = document.getElementById('dicomImages');
+      dicomImages.innerHTML = '';
+
+      // Load and display the DICOM images
+      for (let i = 0; i < fileInput.files.length; i++) {
+        const imageId = 'wadouri:' + fileInput.files[i].name;
+        const dicomImage = document.createElement('div');
+        dicomImage.classList.add('dicomImage');
+        dicomImages.appendChild(dicomImage);
+        cornerstone.enable(dicomImage);
+        cornerstone.loadImage(imageId).then(function(image) {
+          cornerstone.displayImage(dicomImage, image);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
